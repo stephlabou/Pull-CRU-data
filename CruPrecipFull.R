@@ -165,9 +165,10 @@ fullfilt.subset$stationlat <- round(fullfilt.subset$stationlat, 5)
                               
                               
 ###################### rename so merge will work ##############################
-colnames(fullfilt.subset) <- c("uniqueID", "lakename", "season", "lat", "long", 
-                               "start.ymm", "end.ymm", "filteredID")
-                              
+
+## Use dplyr's rename() function to rename "stationlat" and "stationlong" to
+## "lat" and "long"
+fullfilt.subset <- rename(fullfilt.subset, lat = stationlat, long = stationlong)                              
                               
 ########################## merge ###############################
                               
