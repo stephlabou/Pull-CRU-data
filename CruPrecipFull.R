@@ -165,9 +165,6 @@ fullfilt.subset$stationlat <- round(fullfilt.subset$stationlat, 5)
                               
                               
 ###################### rename so merge will work ##############################
-                              
-library(plyr)
-                              
 colnames(fullfilt.subset) <- c("uniqueID", "lakename", "season", "lat", "long", 
                                "start.ymm", "end.ymm", "filteredID")
                               
@@ -248,8 +245,6 @@ names(precip_full_merge)[names(precip_full_merge) == "precip"] <- "total.CRU.pre
                               
 setwd("C:/RPackages/netCDF")
 
-library(ncdf)
-                              
 ncname <- "cru_ts3.22.1901.2013.pre.dat"
 ncfname <- paste(ncname, ".nc", sep = "")
 dname <- "tmpy"
@@ -268,8 +263,7 @@ fullfilt.subset[fullfilt.subset$filteredID %in% missing_cutoff, ]
                               
 #check if values are matching up exactly 
                               
-library(dplyr)
-                              
+                           
 preciplat <- precip.subset %>% filter(lat > 49 & lat < 49.67) %>% summarize(unique(lat))
                               
 fulldflat <- fullfilt.subset %>% filter(lat > 49 & lat < 49.67) %>% summarize(unique(lat))
