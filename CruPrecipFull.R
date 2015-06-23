@@ -101,11 +101,6 @@ head(full)
 
 #to capture full month that sample occured in
 
-end.year.adj <- vector(mode="integer", length=2271)
-
-end.month.adj <- vector(mode="integer", length=2271)
-
-
 full_adj <- full %>% 
   mutate(end.year.adj = ifelse(end.month.num >= 12, endyear + 1, endyear), #if December, goes to Jan of following year
          end.month.adj = ifelse(end.month.num >= 12, 1, end.month.num+1)) # if Dec, make it Jan, otherwise if not Dec, kicks forward one month
