@@ -56,9 +56,7 @@ precipdf <- do.call(rbind, precip)
 
 ############## provide unique ID to full data set #################
 
-uniqueID <- c(1:2271)
-
-full$uniqueID <- uniqueID
+full$uniqueID <- 1:nrow(full)
 
 #check
 
@@ -141,9 +139,9 @@ fullfilt.subset <- subset(fullfilt, select=c("uniqueID", "lakename", "season",
                               
                               
 ################ add a new filtered unique ID (subsetted years) #####################
-                              
-uniqueID2 <- c(1:2237)
-                              
+
+uniqueID2 <- 1:nrow(fullfilt.subset)
+                            
 fullfilt.subset$filteredID <- uniqueID2
                               
 #so there's the unique ID from the beginning
