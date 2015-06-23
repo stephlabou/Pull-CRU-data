@@ -133,9 +133,10 @@ head(full_adj)
 # filtered to only include sample years during CRU period (not 2014 or 2015)
                               
 fullfilt <- filter(full_adj, year < 2014)
-                              
-fullfilt.subset <- subset(fullfilt, select=c("uniqueID", "lakename", "season", 
-                                            "stationlat", "stationlong", "start.ymm", "end.ymm"))
+
+## Keep only columns of interest
+fullfilt.subset <- fullfilt[, c("uniqueID", "lakename", "season", "stationlat",
+                                "stationlong", "start.ymm", "end.ymm")]
                               
                               
 ################ add a new filtered unique ID (subsetted years) #####################
