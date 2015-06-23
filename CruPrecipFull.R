@@ -157,11 +157,11 @@ head(fullfilt.subset)
                               
 #round lat to 5 decimal places
                               
-precip.subset$lat <- round(precip.subset[,3], 5)
+precip.subset$lat <- round(precip.subset$lat, 5)
                               
 #need to also round for fulldf
                               
-fullfilt.subset$stationlat <- round(fullfilt.subset[,4], 5)
+fullfilt.subset$stationlat <- round(fullfilt.subset$stationlat, 5)
                               
                               
 ###################### rename so merge will work ##############################
