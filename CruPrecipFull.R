@@ -56,9 +56,7 @@ precipdf <- do.call(rbind, precip)
 
 ############## provide unique ID to full data set #################
 
-uniqueID <- c(1:2271)
-
-full$uniqueID <- uniqueID
+full$uniqueID <- 1:nrow(full)
 
 #check
 
@@ -103,14 +101,9 @@ head(full)
 
 #to capture full month that sample occured in
 
-end.year.adj <- vector(mode="integer", length=2271)
-
-end.month.adj <- vector(mode="integer", length=2271)
-
-
 full_adj <- full %>% 
   mutate(end.year.adj = ifelse(end.month.num >= 12, endyear + 1, endyear), #if December, goes to Jan of following year
-         end.month.adj = ifelse(end.month.num >= 12, 1, end.month.num+1)) #if not Dec, kicks forward one month
+         end.month.adj = ifelse(end.month.num >= 12, 1, end.month.num+1)) # if Dec, make it Jan, otherwise if not Dec, kicks forward one month
 
 
 ################# collapse sample yr/mm to one column ######################
@@ -135,15 +128,16 @@ head(full_adj)
 # filtered to only include sample years during CRU period (not 2014 or 2015)
                               
 fullfilt <- filter(full_adj, year < 2014)
-                              
-fullfilt.subset <- subset(fullfilt, select=c("uniqueID", "lakename", "season", 
-                                            "stationlat", "stationlong", "start.ymm", "end.ymm"))
+
+## Keep only columns of interest
+fullfilt.subset <- fullfilt[, c("uniqueID", "lakename", "season", "stationlat",
+                                "stationlong", "start.ymm", "end.ymm")]
                               
                               
 ################ add a new filtered unique ID (subsetted years) #####################
-                              
-uniqueID2 <- c(1:2237)
-                              
+
+uniqueID2 <- 1:nrow(fullfilt.subset)
+                            
 fullfilt.subset$filteredID <- uniqueID2
                               
 #so there's the unique ID from the beginning
@@ -158,20 +152,18 @@ head(fullfilt.subset)
                               
 #round lat to 5 decimal places
                               
-precip.subset$lat <- round(precip.subset[,3], 5)
+precip.subset$lat <- round(precip.subset$lat, 5)
                               
 #need to also round for fulldf
                               
-fullfilt.subset$stationlat <- round(fullfilt.subset[,4], 5)
+fullfilt.subset$stationlat <- round(fullfilt.subset$stationlat, 5)
                               
                               
 ###################### rename so merge will work ##############################
-                              
-library(plyr)
-                              
-colnames(fullfilt.subset) <- c("uniqueID", "lakename", "season", "lat", "long", 
-                               "start.ymm", "end.ymm", "filteredID")
-                              
+
+## Use dplyr's rename() function to rename "stationlat" and "stationlong" to
+## "lat" and "long"
+fullfilt.subset <- rename(fullfilt.subset, lat = stationlat, long = stationlong)                              
                               
 ########################## merge ###############################
                               
@@ -249,8 +241,6 @@ names(precip_full_merge)[names(precip_full_merge) == "precip"] <- "total.CRU.pre
                               
 setwd("C:/RPackages/netCDF")
 
-library(ncdf)
-                              
 ncname <- "cru_ts3.22.1901.2013.pre.dat"
 ncfname <- paste(ncname, ".nc", sep = "")
 dname <- "tmpy"
@@ -269,8 +259,7 @@ fullfilt.subset[fullfilt.subset$filteredID %in% missing_cutoff, ]
                               
 #check if values are matching up exactly 
                               
-library(dplyr)
-                              
+                           
 preciplat <- precip.subset %>% filter(lat > 49 & lat < 49.67) %>% summarize(unique(lat))
                               
 fulldflat <- fullfilt.subset %>% filter(lat > 49 & lat < 49.67) %>% summarize(unique(lat))
